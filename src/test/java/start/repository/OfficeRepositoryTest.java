@@ -3,7 +3,6 @@ package start.repository;
 import org.junit.jupiter.api.Test;
 import start.domain.Office;
 
-
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Optional;
@@ -12,62 +11,45 @@ import java.util.Properties;
 import static org.junit.jupiter.api.Assertions.*;
 
 class OfficeRepositoryTest {
+
     @Test
-    void testOfficeRepo() throws RepositoryException {
-        var dbProp=new Properties();
-        //Repo initialization
+    void testOfficeRepo() {
         try {
+            var dbProp=new Properties();
             dbProp.load(new FileReader("db.config"));
-        } catch (IOException e) {
-            fail("File not found");
+            var officeRepo=new OfficeRepository(dbProp);
+            //Init
+            var t1=new Office("T1","1");
+            var t2=new Office("T2","2");
+            var t3=new Office("T3","3");
+            assertDoesNotThrow(()-> officeRepo.add(t1),"T1 added");
+            assertDoesNotThrow(()-> officeRepo.add(t2),"T2 added");
+            assertDoesNotThrow(()-> officeRepo.add(t3),"T3 added");
+            assertThrows(RepositoryException.class,()-> officeRepo.add(t3),"A duplicated key -> not added");
+            //Add
+
+            var found=officeRepo.findByUsername("T1");
+            assertTrue(found.isPresent(),"Find by id pass");
+            var foundID=officeRepo.find(found.get().getId());
+            assertEquals(foundID,found,"Find by it pass");
+            //Findings
+            assertEquals(3,officeRepo.getAll().size(),"Get all passed");
+            //Get all
+            var updated=new Office("T11","T11");
+            updated.setId(foundID.get().getId());
+            officeRepo.update(updated);
+            assertEquals("T11",officeRepo.find(foundID.get().getId()).get().getUsername());
+            //Update
+
+            officeRepo.delete(officeRepo.findByUsername("T11").get().getId());
+            officeRepo.delete(officeRepo.findByUsername("T2").get().getId());
+            officeRepo.delete(officeRepo.findByUsername("T3").get().getId());
+            //Delete
+            assertEquals(0,officeRepo.getAll().size(),"Delete complete");
+            //Get all
+
+        } catch (IOException | RepositoryException e) {
+            assert false;
         }
-        var officeRepo=new OfficeRepository(dbProp);
-        var officeDummy=new Office("Dummy","DummyPassw");
-        var officeDummy2=new Office("Dummy2","DummyPassw");
-        //Add new office
-        assertDoesNotThrow(()->officeRepo.add(officeDummy),"Add pass");
-        assertDoesNotThrow(()->officeRepo.add(officeDummy2),"Add pass");
-        //Find by username test
-        assertDoesNotThrow(
-                ()-> assertNotEquals(
-                        Optional.empty(),
-                        officeRepo.findByUsername("Dummy")),
-                "Find by username pass");
-        var found=officeRepo.findByUsername("Dummy").get();
-
-        //Find all test
-        assertNotEquals(0,officeRepo.getAll().size());
-
-        //Find by id test
-        assertDoesNotThrow(
-                ()-> assertEquals(
-                        found.getUsername(),
-                        officeRepo.find(found.getId()).get().getUsername()),
-                "Find by id pass");
-
-        //Update the element
-        var updatedDummy=new Office("Dummy2.0","StrongDummy");
-        updatedDummy.setId(found.getId());
-
-        //Find if the element was updated
-        assertDoesNotThrow( ()->officeRepo.update(updatedDummy),"Update1 pass");
-
-        //Check if the old element was updated
-        assertDoesNotThrow(
-                ()-> assertEquals(
-                        Optional.empty(),
-                        officeRepo.findByUsername("Dummy")),
-                "Update1/2 pass");
-        assertDoesNotThrow(
-                ()-> assertEquals(
-                        updatedDummy.getPassword(),
-                        officeRepo.findByUsername("Dummy2.0").get().getPassword()),
-                "Update2/2 pass");
-
-        //Delete the element.
-        assertDoesNotThrow( ()->officeRepo.delete(updatedDummy.getId()),"Deleted pass");
-        assertDoesNotThrow( ()->officeRepo.delete(officeRepo.findByUsername("Dummy2").get().getId()),"Deleted pass");
-
     }
-
 }

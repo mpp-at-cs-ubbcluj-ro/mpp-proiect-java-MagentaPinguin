@@ -39,20 +39,6 @@ public class OfficeRepository implements IOfficeRepository {
     }
 
     @Override
-    public void delete(Long itemID) throws RepositoryException {
-        logger.traceEntry("Param {}", itemID);
-        String sqlDelete = "DELETE from offices where id=?";
-        try (var connection = dbConnection.getConnection();
-             var statement = connection.prepareStatement(sqlDelete)) {
-            statement.setObject(1, itemID);
-            statement.executeUpdate();
-            logger.traceExit("Deleted successful");
-        } catch (SQLException | IOException e) {
-            throw logger.throwing(new RepositoryException(e));
-        }
-    }
-
-    @Override
     public void update(Office item) throws RepositoryException {
         logger.traceEntry("Param {}", item);
         String sqlUpdate = "Update offices  set username=?, password=? where id=?";
@@ -90,6 +76,28 @@ public class OfficeRepository implements IOfficeRepository {
             throw new RuntimeException(e);
         }
     }
+    @Override
+    public Optional<Office> findByUsername(String username) throws RepositoryException {
+        logger.traceEntry("Param {}", username);
+        String sqlFind = "SELECT * from offices where username=?";
+        try (var connection = dbConnection.getConnection();
+             var statement = connection.prepareStatement(sqlFind)) {
+            statement.setObject(1, username);
+            var result = statement.executeQuery();
+            if (!result.next()){
+                logger.traceExit("None was found by username successful");
+                return Optional.empty();}
+            var item = new Office(
+                    result.getString("username"),
+                    result.getString("password"));
+            item.setId(result.getLong("id"));
+            logger.traceExit("Find by username successful");
+            return Optional.of(item);
+
+        } catch (SQLException | IOException e) {
+            throw logger.throwing(new RepositoryException(e));
+        }
+    }
 
     @Override
     public List<Office> getAll() throws RepositoryException {
@@ -113,27 +121,23 @@ public class OfficeRepository implements IOfficeRepository {
             throw logger.throwing(new RepositoryException(e));
         }
     }
-
     @Override
-    public Optional<Office> findByUsername(String username) throws RepositoryException {
-        logger.traceEntry("Param {}", username);
-        String sqlFind = "SELECT * from offices where username=?";
+    public void delete(Long itemID) throws RepositoryException {
+        logger.traceEntry("Param {}", itemID);
+        String sqlDelete = "DELETE from offices where id=?";
         try (var connection = dbConnection.getConnection();
-             var statement = connection.prepareStatement(sqlFind)) {
-            statement.setObject(1, username);
-            var result = statement.executeQuery();
-            if (!result.next()){
-                logger.traceExit("None was found by username successful");
-                return Optional.empty();}
-            var item = new Office(
-                    result.getString("username"),
-                    result.getString("password"));
-            item.setId(result.getLong("id"));
-            logger.traceExit("Find by username successful");
-            return Optional.of(item);
-
+             var statement = connection.prepareStatement(sqlDelete)) {
+            statement.setObject(1, itemID);
+            var afect=statement.executeUpdate();
+            if (afect==0){
+                logger.traceExit("Nothing deleted");
+                return;
+            }
+            logger.traceExit("Deleted successful");
         } catch (SQLException | IOException e) {
             throw logger.throwing(new RepositoryException(e));
         }
     }
+
+
 }

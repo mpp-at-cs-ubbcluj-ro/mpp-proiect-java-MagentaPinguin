@@ -71,28 +71,10 @@ public class TrialRepository implements ITrialRepository {
             throw log.throwing(new RepositoryException(ex));
         }
     }
+    @Deprecated
     @Override
     public Optional<Trial> find(Long itemID) throws RepositoryException {
-        log.traceEntry("Params{}",itemID);
-        String sqlFind="SELECT  * from trials where id=?";
-        try(var connection= dbConnection.getConnection();
-            var statement=connection.prepareStatement(sqlFind)){
-            statement.setObject(1,itemID);
-            var result=statement.executeQuery();
-            if (!result.next()){
-                log.traceExit("None was found by id");
-                return Optional.empty();
-            }
-            var item = new Trial(
-                    result.getString("name"),
-                    result.getInt("min_age"),
-                    result.getInt("max_age"));
-            item.setId(result.getLong("id"));
-            log.traceExit("Find successful");
-            return Optional.of(item);
-        } catch (SQLException | IOException e) {
-            throw log.throwing(new RepositoryException(e));
-        }
+       return Optional.empty();
     }
 
     @Override
@@ -119,12 +101,14 @@ public class TrialRepository implements ITrialRepository {
     }
 
     @Override
-    public Optional<Trial> findByName(String name) throws RepositoryException {
-        log.traceEntry("Params{}",name);
-        String sqlUpdate="SELECT  * from trials where name=?";
+    public Optional<Trial> getSpecificTrial(String name, int minAge, int maxAge) throws RepositoryException {
+        log.traceEntry("Params{}",name,minAge,maxAge);
+        String sqlUpdate="SELECT  * from trials where name=? and min_age=? and max_age=?";
         try(var connection= dbConnection.getConnection();
             var statement=connection.prepareStatement(sqlUpdate)){
             statement.setObject(1,name);
+            statement.setObject(2,minAge);
+            statement.setObject(3,maxAge);
             var result=statement.executeQuery();
             if (!result.next()){
                 log.traceExit("None was found by id");
@@ -143,7 +127,32 @@ public class TrialRepository implements ITrialRepository {
     }
 
     @Override
-    public List<Trial> getAllForAge(int age) throws RepositoryException {
+    public List<Trial> findByName(String name) throws RepositoryException {
+        log.traceEntry("Params{}",name);
+        List<Trial> list=new ArrayList<>();
+        String sqlUpdate="SELECT  * from trials where name=?";
+        try(var connection= dbConnection.getConnection();
+            var statement=connection.prepareStatement(sqlUpdate)){
+            statement.setObject(1,name);
+            var result=statement.executeQuery();
+            while(result.next()) {
+                var item = new Trial(
+                        result.getString("name"),
+                        result.getInt("min_age"),
+                        result.getInt("max_age"));
+                item.setId(result.getLong("id"));
+                list.add(item);
+            item.setId(result.getLong("id"));
+            }
+            log.traceExit("Find successful");
+            return list;
+        } catch (SQLException | IOException e) {
+            throw log.throwing(new RepositoryException(e));
+        }
+    }
+
+    @Override
+    public List<Trial> getTrialsForAge(int age) throws RepositoryException {
         log.traceEntry("Params{}");
         List<Trial> list=new ArrayList<>();
         String sqlGetAll="SELECT  * from trials where min_age<= ?  and ? <=max_age";

@@ -20,6 +20,22 @@ public class Enrolled extends Entity<Long> {
         this.trial = trial;
     }
 
+    public Participant getParticipant() {
+        return participant;
+    }
+
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
+    }
+
+    public Trial getTrial() {
+        return trial;
+    }
+
+    public void setTrial(Trial trial) {
+        this.trial = trial;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -37,5 +53,10 @@ public class Enrolled extends Entity<Long> {
         int result = participant != null ? participant.hashCode() : 0;
         result = 31 * result + (trial != null ? trial.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Enrolled " +"participant=" + participant + ", trial=" + trial;
     }
 }

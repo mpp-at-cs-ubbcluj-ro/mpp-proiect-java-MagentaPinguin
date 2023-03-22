@@ -64,4 +64,13 @@ public class Trial extends Entity<Long> {
         result = 31 * result + getMaxAge();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Trial{" +
+                "name='" + name + '\'' +
+                ", minAge=" + minAge +
+                ", maxAge=" + maxAge +
+                '}';
+    }
 }

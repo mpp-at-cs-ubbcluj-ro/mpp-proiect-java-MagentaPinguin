@@ -4,8 +4,16 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import start.repository.EnrolledRepository;
+import start.repository.ParticipantRepository;
+import start.repository.RepositoryException;
+import start.repository.TrialRepository;
+import start.utils.ConnectionFactory;
 
+import java.io.FileReader;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Properties;
 
 public class HelloApplication extends Application {
     @Override
@@ -17,7 +25,15 @@ public class HelloApplication extends Application {
         stage.show();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, SQLException, RepositoryException {
+        var dbProp=new Properties();
+        dbProp.load(new FileReader("db.config"));
+        var pRepo= new ParticipantRepository(dbProp);
+        var tRepo=new TrialRepository(dbProp);
+        var enrollRepo=new EnrolledRepository(pRepo,tRepo,dbProp);
+
+        System.out.println(enrollRepo.getEnrolledAt(tRepo.find(0L).get()));
+
         launch();
     }
 }

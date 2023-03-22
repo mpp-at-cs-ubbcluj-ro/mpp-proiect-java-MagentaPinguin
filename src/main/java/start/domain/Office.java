@@ -53,4 +53,9 @@ public class Office extends Entity<Long> {
         result = 31 * result + (getPassword() != null ? getPassword().hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Office: username=" + username + " password=" + password;
+    }
 }

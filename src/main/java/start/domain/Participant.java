@@ -65,4 +65,13 @@ public class Participant extends Entity<Long> {
         result = 31 * result + getAge();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Participant{" +
+                "name='" + name + '\'' +
+                ", cnp='" + cnp + '\'' +
+                ", age=" + age +
+                '}';
+    }
 }

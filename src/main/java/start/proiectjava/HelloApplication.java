@@ -26,14 +26,6 @@ public class HelloApplication extends Application {
     }
 
     public static void main(String[] args) throws IOException, SQLException, RepositoryException {
-        var dbProp=new Properties();
-        dbProp.load(new FileReader("db.config"));
-        var pRepo= new ParticipantRepository(dbProp);
-        var tRepo=new TrialRepository(dbProp);
-        var enrollRepo=new EnrolledRepository(pRepo,tRepo,dbProp);
-
-        System.out.println(enrollRepo.getEnrolledAt(tRepo.find(0L).get()));
-
         launch();
     }
 }

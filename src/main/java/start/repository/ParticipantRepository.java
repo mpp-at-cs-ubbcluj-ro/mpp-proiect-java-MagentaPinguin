@@ -26,7 +26,7 @@ public class ParticipantRepository implements IParticipantRepository {
         logger.traceEntry("Params{}",item);
         String sqlAdd="INSERT into participants (fullname, cnp, age) VALUES (?,?,?)";
         try(var connection=dbConnection.getConnection();
-        var statement=connection.prepareStatement(sqlAdd)){
+            var statement=connection.prepareStatement(sqlAdd)){
             statement.setObject(1,item.getName());
             statement.setObject(2,item.getCnp());
             statement.setObject(3,item.getAge());
@@ -40,7 +40,7 @@ public class ParticipantRepository implements IParticipantRepository {
     @Override
     public void delete(Long itemID) throws RepositoryException {
         logger.traceEntry("Params{}",itemID);
-        String sqlDelete="Delete from participants where id=?";
+        String sqlDelete="Delete from participants where id_participant=?";
         try(var connection=dbConnection.getConnection();
             var statement=connection.prepareStatement(sqlDelete)){
             statement.setObject(1,itemID);
@@ -54,7 +54,7 @@ public class ParticipantRepository implements IParticipantRepository {
     @Override
     public void update(Participant item) throws RepositoryException {
         logger.traceEntry("Params{}",item);
-        String sqlUpdate="UPDATE participants set fullname=?, cnp=?, age=? where id=?";
+        String sqlUpdate="UPDATE participants set fullname=?, cnp=?, age=? where id_participant=?";
         try(var connection=dbConnection.getConnection();
             var statement=connection.prepareStatement(sqlUpdate)){
             statement.setObject(1,item.getName());
@@ -71,7 +71,7 @@ public class ParticipantRepository implements IParticipantRepository {
     @Override
     public Optional<Participant> find(Long itemID) throws RepositoryException {
         logger.traceEntry("Params{}",itemID);
-        String sqlFind="SELECT  * from participants where id=?";
+        String sqlFind="SELECT  * from participants where id_participant=?";
         try(var connection=dbConnection.getConnection();
             var statement=connection.prepareStatement(sqlFind)){
             statement.setObject(1,itemID);
@@ -85,7 +85,7 @@ public class ParticipantRepository implements IParticipantRepository {
                     result.getString("cnp"),
                     result.getInt("age"));
 
-            item.setId(result.getLong("id"));
+            item.setId(result.getLong("id_participant"));
             logger.traceExit("Find successful");
             return Optional.of(item);
         } catch (SQLException | IOException e) {
@@ -107,7 +107,7 @@ public class ParticipantRepository implements IParticipantRepository {
                         result.getString("cnp"),
                         result.getInt("age"));
 
-                item.setId(result.getLong("id"));
+                item.setId(result.getLong("id_participant"));
                 list.add(item);
             }
             logger.traceExit("Find successful");
@@ -134,7 +134,7 @@ public class ParticipantRepository implements IParticipantRepository {
                     result.getString("cnp"),
                     result.getInt("age"));
 
-            item.setId(result.getLong("id"));
+            item.setId(result.getLong("id_participant"));
             logger.traceExit("Find successful");
             return Optional.of(item);
         } catch (SQLException | IOException e) {

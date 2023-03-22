@@ -43,7 +43,7 @@ public class TrialRepository implements ITrialRepository {
     @Override
     public void delete(Long itemID) throws RepositoryException {
         log.traceEntry("Params: {}",itemID);
-        String sqlAdd="DELETE from trials where id=?";
+        String sqlAdd="DELETE from trials where id_trial=?";
         try(var connection = dbConnection.getConnection();
             var statement=connection.prepareStatement(sqlAdd)){
             statement.setObject(1,itemID);
@@ -57,7 +57,7 @@ public class TrialRepository implements ITrialRepository {
     @Override
     public void update(Trial item) throws RepositoryException {
         log.traceEntry("Params: {}",item);
-        String sqlAdd="Update trials set name=?,min_age=?,max_age=? where id=?";
+        String sqlAdd="Update trials set name=?,min_age=?,max_age=? where id_trial=?";
         try(var connection = dbConnection.getConnection();
             var statement=connection.prepareStatement(sqlAdd)){
 
@@ -71,10 +71,28 @@ public class TrialRepository implements ITrialRepository {
             throw log.throwing(new RepositoryException(ex));
         }
     }
-    @Deprecated
     @Override
     public Optional<Trial> find(Long itemID) throws RepositoryException {
-       return Optional.empty();
+        log.traceEntry("Params{}",itemID);
+        String sqlUpdate="SELECT  * from trials where id_trial=? ";
+        try(var connection= dbConnection.getConnection();
+            var statement=connection.prepareStatement(sqlUpdate)){
+            statement.setObject(1,itemID);
+            var result=statement.executeQuery();
+            if (!result.next()){
+                log.traceExit("None was found by id");
+                return Optional.empty();
+            }
+            var item = new Trial(
+                    result.getString("name"),
+                    result.getInt("min_age"),
+                    result.getInt("max_age"));
+            item.setId(result.getLong("id_trial"));
+            log.traceExit("Find successful");
+            return Optional.of(item);
+        } catch (SQLException | IOException e) {
+            throw log.throwing(new RepositoryException(e));
+        }
     }
 
     @Override
@@ -90,7 +108,7 @@ public class TrialRepository implements ITrialRepository {
                         result.getString("name"),
                         result.getInt("min_age"),
                         result.getInt("max_age"));
-                item.setId(result.getLong("id"));
+                item.setId(result.getLong("id_trial"));
                 list.add(item);
             }
             log.traceExit("Find successful");
@@ -118,7 +136,7 @@ public class TrialRepository implements ITrialRepository {
                     result.getString("name"),
                     result.getInt("min_age"),
                     result.getInt("max_age"));
-            item.setId(result.getLong("id"));
+            item.setId(result.getLong("id_trial"));
             log.traceExit("Find successful");
             return Optional.of(item);
         } catch (SQLException | IOException e) {
@@ -140,9 +158,8 @@ public class TrialRepository implements ITrialRepository {
                         result.getString("name"),
                         result.getInt("min_age"),
                         result.getInt("max_age"));
-                item.setId(result.getLong("id"));
+                item.setId(result.getLong("id_trial"));
                 list.add(item);
-            item.setId(result.getLong("id"));
             }
             log.traceExit("Find successful");
             return list;
@@ -166,7 +183,7 @@ public class TrialRepository implements ITrialRepository {
                         result.getString("name"),
                         result.getInt("min_age"),
                         result.getInt("max_age"));
-                item.setId(result.getLong("id"));
+                item.setId(result.getLong("id_trial"));
                 list.add(item);
             }
             log.traceExit("Find successful");

@@ -1,5 +1,4 @@
 package start.repository;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import start.domain.Enrolled;
@@ -8,6 +7,7 @@ import start.domain.Trial;
 import start.repository.interfaces.IEnrolledRepository;
 import start.utils.ConnectionFactory;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.Properties;
 
 public class EnrolledRepository implements IEnrolledRepository {
-    private static final Logger log = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger();
     private final ConnectionFactory dbConnection;
 
     public EnrolledRepository( Properties prop) {
@@ -24,31 +24,41 @@ public class EnrolledRepository implements IEnrolledRepository {
 
     @Override
     public void add(Enrolled item) throws RepositoryException {
-        log.traceEntry("Params {}", item);
+        logger.traceEntry("Params {}", item);
         String sqlAdd = "INSERT INTO enrollments (id_trial, id_participant) VALUES (?,?)";
-        try (var connection = dbConnection.getConnection();
-             var statement = connection.prepareStatement(sqlAdd)) {
+        Connection connection;
+        try {
+            connection=dbConnection.getConnection();
+        } catch (IOException | SQLException e) {
+            throw logger.throwing(new RepositoryException(e));
+        }
+        try (var statement = connection.prepareStatement(sqlAdd)) {
             statement.setObject(1, item.getTrial().getId());
             statement.setObject(2, item.getParticipant().getId());
             statement.execute();
-            log.traceExit("Added success.");
-        } catch (SQLException | IOException e) {
-            System.out.println("EROR");
-            throw log.throwing(new RepositoryException(e));
+            logger.traceExit("Added success.");
+        } catch (SQLException e) {
+            throw logger.throwing(new RepositoryException(e));
         }
     }
 
     @Override
     public void delete(Long itemID) throws RepositoryException {
-        log.traceEntry("Params {}", itemID);
+        logger.traceEntry("Params {}", itemID);
         String sqlAdd = "DELETE from enrollments where id_enroll=?";
-        try (var connection = dbConnection.getConnection();
-             var statement = connection.prepareStatement(sqlAdd)) {
+        Connection connection;
+        try {
+            connection=dbConnection.getConnection();
+        } catch (IOException | SQLException e) {
+            throw logger.throwing(new RepositoryException(e));
+        }
+
+        try (var statement = connection.prepareStatement(sqlAdd)) {
             statement.setObject(1, itemID);
             statement.execute();
-            log.traceExit("Delete success.");
-        } catch (SQLException | IOException e) {
-            throw log.throwing(new RepositoryException(e));
+            logger.traceExit("Delete success.");
+        } catch (SQLException e) {
+            throw logger.throwing(new RepositoryException(e));
         }
     }
 
@@ -56,6 +66,7 @@ public class EnrolledRepository implements IEnrolledRepository {
     @Override
     public void update(Enrolled item) throws RepositoryException {
     }
+
     @Deprecated
     @Override
     public Optional<Enrolled> find(Long itemID) throws RepositoryException {
@@ -66,7 +77,15 @@ public class EnrolledRepository implements IEnrolledRepository {
     public List<Trial> getTrialsFor(Participant participant) throws RepositoryException {
         List<Trial> list=new ArrayList<>();
         String sqlFindTrialsFor ="SELECT * from trials inner join enrollments e on trials.id_trial = e.id_trial where id_participant=?";
-        try(var connection= dbConnection.getConnection();
+
+        Connection connection;
+        try {
+            connection=dbConnection.getConnection();
+        } catch (IOException | SQLException e) {
+            throw logger.throwing(new RepositoryException(e));
+        }
+
+        try(
             var statement=connection.prepareStatement(sqlFindTrialsFor)) {
             statement.setObject(1,participant.getId());
 
@@ -80,8 +99,8 @@ public class EnrolledRepository implements IEnrolledRepository {
                 list.add(item);
             }
             return list;
-        } catch (SQLException | IOException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw logger.throwing(new RepositoryException(e));
         }
     }
 
@@ -89,7 +108,15 @@ public class EnrolledRepository implements IEnrolledRepository {
     public List<Participant> getEnrolledAt(Trial trial) throws RepositoryException {
         List<Participant> list=new ArrayList<>();
         String sqlFindTrialsFor ="SELECT * from participants inner join enrollments e on participants.id_participant = e.id_participant where id_trial=?";
-        try(var connection= dbConnection.getConnection();
+        Connection connection;
+        try {
+            connection=dbConnection.getConnection();
+        } catch (IOException | SQLException e) {
+            throw logger.throwing(new RepositoryException(e));
+
+        }
+
+        try(
             var statement=connection.prepareStatement(sqlFindTrialsFor)) {
             statement.setObject(1,trial.getId());
 
@@ -104,8 +131,8 @@ public class EnrolledRepository implements IEnrolledRepository {
                 list.add(item);
             }
             return list;
-        } catch (SQLException | IOException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw logger.throwing(new RepositoryException(e));
         }
     }
 
@@ -113,7 +140,16 @@ public class EnrolledRepository implements IEnrolledRepository {
     public List<Enrolled> getAll() throws RepositoryException {
         List<Enrolled> list=new ArrayList<>();
         String sqlFindTrialsFor ="SELECT * from participants p, trials t,enrollments e where (e.id_participant=p.id_participant and e.id_trial = t.id_trial)";
-        try(var connection= dbConnection.getConnection();
+
+        Connection connection;
+        try {
+            connection=dbConnection.getConnection();
+        } catch (IOException | SQLException e) {
+            throw logger.throwing(new RepositoryException(e));
+
+        }
+
+        try(
             var statement=connection.prepareStatement(sqlFindTrialsFor)) {
             var result=statement.executeQuery();
             while(result.next()) {
@@ -126,8 +162,9 @@ public class EnrolledRepository implements IEnrolledRepository {
                 list.add(item);
             }
             return list;
-        } catch (SQLException | IOException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw logger.throwing(new RepositoryException(e));
+
         }
     }
 }

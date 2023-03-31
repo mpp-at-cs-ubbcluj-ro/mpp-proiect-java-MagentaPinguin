@@ -3,16 +3,20 @@ package start.service;
 import javafx.scene.control.TextField;
 import start.domain.Participant;
 import start.domain.Trial;
+import start.service.interfaces.IEnrollmentService;
+import start.service.interfaces.IOfficeService;
+import start.service.interfaces.IParticipantService;
+import start.service.interfaces.ITrialService;
 
 import java.util.List;
 
 
 public class Service {
 
-    private ServiceOffice serviceOffice;
-    private ServiceParticipant serviceParticipant;
-    private ServiceTrial serviceTrial;
-    private ServiceEnrollment serviceEnrollment;
+    private IOfficeService serviceOffice;
+    private IParticipantService serviceParticipant;
+    private ITrialService serviceTrial;
+    private IEnrollmentService serviceEnrollment;
 
     public Service(ServiceOffice serviceOffice, ServiceParticipant serviceParticipant, ServiceTrial serviceTrial, ServiceEnrollment serviceEnrollment) {
         this.serviceOffice = serviceOffice;

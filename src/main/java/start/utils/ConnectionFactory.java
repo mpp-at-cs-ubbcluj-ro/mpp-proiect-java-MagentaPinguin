@@ -15,7 +15,7 @@ public class ConnectionFactory {
         var url=jdbcProps.get("dbUrl");
         var user=jdbcProps.get("dbUser");
         var passwd=jdbcProps.get("dbPass");
-        if(user==null && passwd==null){
+        if(user==null ||  passwd==null){
             instance=DriverManager.getConnection(url.toString());
             return;
         }

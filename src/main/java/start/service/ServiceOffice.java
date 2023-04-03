@@ -9,7 +9,7 @@ import start.service.interfaces.IOfficeService;
 
 public class ServiceOffice implements IOfficeService {
 
-    private static final Logger log = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger();
     private IOfficeRepository officeRepository;
     public ServiceOffice(IOfficeRepository repository) {
         officeRepository=repository;
@@ -18,12 +18,13 @@ public class ServiceOffice implements IOfficeService {
 
     @Override
     public boolean login(String username, String password) throws ServiceException {
-        log.traceEntry("Params {}",username,password);
+        logger.traceEntry("Params {}",username,password);
         try {
             var found=officeRepository.findByUsername(username);
+            logger.traceExit("Login exit");
             return found.isPresent() && found.get().getPassword().equals(password);
         }catch (RepositoryException ex){
-            throw log.throwing(new ServiceException(ex));
+            throw logger.throwing(new ServiceException(ex));
         }
     }
 }

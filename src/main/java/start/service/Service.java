@@ -3,6 +3,7 @@ package start.service;
 import javafx.scene.control.TextField;
 import start.domain.Participant;
 import start.domain.Trial;
+import start.service.dtos.DtoTrial;
 import start.service.interfaces.IEnrollmentService;
 import start.service.interfaces.IOfficeService;
 import start.service.interfaces.IParticipantService;
@@ -29,8 +30,17 @@ public class Service {
         return serviceOffice.login(username,passwd);
     }
 
-    public List<Trial> getTrials() throws ServiceException {
-        return serviceTrial.getTrials();
+    public List<DtoTrial> getTrials() throws ServiceException {
+
+       return serviceTrial.getTrials()
+                .stream()
+                .map(e-> {
+                    try{
+                        return new DtoTrial(e,serviceEnrollment.getEnrolledAt(e).size());
+                    }catch (ServiceException ex) {
+                    throw new RuntimeException(ex);
+                }}).toList();
+
     }
 
     public List<Participant> getParticipants() throws ServiceException {
@@ -53,22 +63,6 @@ public class Service {
         serviceParticipant.addParticipant(inputFullName.getText(),
                 inputCnp.getText(),
                 Integer.parseInt(inputAge.getText()));
-    }
-
-    public void addTrial(TextField inputTrialName, TextField inputMinAge, TextField inputMaxAge) throws ServiceException {
-
-        if(inputTrialName.getText().isEmpty() ||inputMinAge.getText().isEmpty() ||inputMaxAge.getText().isEmpty())
-            throw new ServiceException("Missing arguments");
-        try {
-            var min = Integer.parseInt(inputMinAge.getText());
-            var max = Integer.parseInt(inputMaxAge.getText());
-            if (min <= 0 || max <= 0 || min>=max)
-                throw new Exception("Bad arguments");
-            serviceTrial.addTrial(inputTrialName.getText(),min,max);
-        }catch (Exception e){
-        throw new ServiceException(e);
-        }
-
     }
 
     public void addEnrollment(Participant p, Trial t) throws ServiceException{

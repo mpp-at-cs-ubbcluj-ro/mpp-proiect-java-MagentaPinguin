@@ -8,6 +8,7 @@ module start.proiectjava {
     opens start.proiectjava to javafx.fxml;
     exports start.proiectjava;
     exports start.domain;
+    exports start.service.dtos;
     exports start.service.interfaces;
     exports start.repository.interfaces;
 }

@@ -25,6 +25,7 @@ public class EnrolledRepository implements IEnrolledRepository {
     @Override
     public void add(Enrolled item) throws RepositoryException {
         logger.traceEntry("Params {}", item);
+
         String sqlAdd = "INSERT INTO enrollments (id_trial, id_participant) VALUES (?,?)";
         Connection connection;
         try {
@@ -40,6 +41,7 @@ public class EnrolledRepository implements IEnrolledRepository {
         } catch (SQLException e) {
             throw logger.throwing(new RepositoryException(e));
         }
+
     }
 
     @Override
@@ -75,9 +77,9 @@ public class EnrolledRepository implements IEnrolledRepository {
 
     @Override
     public List<Trial> getTrialsFor(Participant participant) throws RepositoryException {
+        logger.traceEntry("Params {}", participant);
         List<Trial> list=new ArrayList<>();
-        String sqlFindTrialsFor ="SELECT * from trials inner join enrollments e on trials.id_trial = e.id_trial where id_participant=?";
-
+        String sqlFindTrialsFor ="SELECT * from trials t inner join enrollments e on t.id_trial = e.id_trial where id_participant=?";
         Connection connection;
         try {
             connection=dbConnection.getConnection();
@@ -98,6 +100,7 @@ public class EnrolledRepository implements IEnrolledRepository {
                 item.setId(result.getLong("id_trial"));
                 list.add(item);
             }
+            logger.traceExit("GetTrialsFor exit.");
             return list;
         } catch (SQLException e) {
             throw logger.throwing(new RepositoryException(e));
@@ -106,6 +109,7 @@ public class EnrolledRepository implements IEnrolledRepository {
 
     @Override
     public List<Participant> getEnrolledAt(Trial trial) throws RepositoryException {
+        logger.traceEntry("Params {}", trial);
         List<Participant> list=new ArrayList<>();
         String sqlFindTrialsFor ="SELECT * from participants inner join enrollments e on participants.id_participant = e.id_participant where id_trial=?";
         Connection connection;
@@ -130,6 +134,7 @@ public class EnrolledRepository implements IEnrolledRepository {
                 item.setId(result.getLong("id_participant"));
                 list.add(item);
             }
+            logger.traceExit("GetEntrolledAt exit.");
             return list;
         } catch (SQLException e) {
             throw logger.throwing(new RepositoryException(e));
@@ -138,6 +143,7 @@ public class EnrolledRepository implements IEnrolledRepository {
 
     @Override
     public List<Enrolled> getAll() throws RepositoryException {
+        logger.traceEntry("Params {}");
         List<Enrolled> list=new ArrayList<>();
         String sqlFindTrialsFor ="SELECT * from participants p, trials t,enrollments e where (e.id_participant=p.id_participant and e.id_trial = t.id_trial)";
 
@@ -161,6 +167,7 @@ public class EnrolledRepository implements IEnrolledRepository {
                 item.setId(result.getLong("id_enroll"));
                 list.add(item);
             }
+            logger.traceExit("GetAll exit.");
             return list;
         } catch (SQLException e) {
             throw logger.throwing(new RepositoryException(e));

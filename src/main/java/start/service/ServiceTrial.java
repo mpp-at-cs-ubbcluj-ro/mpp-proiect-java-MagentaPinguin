@@ -11,31 +11,33 @@ import java.util.List;
 
 public class ServiceTrial implements ITrialService {
 
-    private static final Logger log = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger();
     private final ITrialRepository trialRepository;
+
     public ServiceTrial(ITrialRepository repository) {
-        trialRepository=repository;
+        trialRepository = repository;
     }
 
     public List<Trial> getTrials() throws ServiceException {
-        log.traceEntry();
+        logger.traceEntry("Params");
         try {
+            logger.traceExit("GetTrial exit.");
             return trialRepository.getAll();
         } catch (RepositoryException e) {
-
-            throw new ServiceException(e);
+            throw logger.throwing(new ServiceException(e));
         }
     }
 
     public void addTrial(String text, int min, int max) throws ServiceException {
-          try{
-              if(trialRepository.getSpecificTrial(text,min,max).isPresent())
-                  throw new ServiceException("Trial already exist");
-              trialRepository.add(new Trial(text,min,max));
+        logger.traceEntry("Params {0} {1},{2}", text, min, max);
+        try {
+            if (trialRepository.getSpecificTrial(text, min, max).isPresent())
+                throw new ServiceException("Trial already exist");
+            trialRepository.add(new Trial(text, min, max));
 
-          }catch (RepositoryException e){
-                throw new ServiceException(e);
-          }
+        } catch (RepositoryException e) {
+            throw logger.throwing(new ServiceException(e));
+        }
 
     }
 }

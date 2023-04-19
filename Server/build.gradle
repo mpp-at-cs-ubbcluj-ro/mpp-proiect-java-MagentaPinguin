@@ -1,15 +1,27 @@
 plugins {
     id 'java'
+    id 'application'
+
 }
 
-group 'org.example'
+group 'Server'
 version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
 }
 
+application{
+
+    mainClass='server.RpcServer'
+}
+
 dependencies {
+    implementation project (':Model')
+    implementation project (':Services')
+    implementation project (':Persistence')
+    implementation project (':Network')
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }

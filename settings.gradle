@@ -1,1 +1,8 @@
-rootProject.name = "ProiectJava"
+rootProject.name = 'ClientServerJava'
+include 'ClientSide'
+include 'Services'
+include 'Model'
+include 'Persistence'
+include 'Network'
+include 'Server'
+

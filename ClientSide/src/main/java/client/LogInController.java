@@ -25,20 +25,21 @@ public class LogInController extends AbstractController{
 
     public void login(ActionEvent mouseEvent) {
         try {
-            var found =this.service.login(new Office(input_username.getText(),input_passwd.getText()), new ViewOfficeController());
-            if(found!=null){
-                FXMLLoader fxmlLoader = new FXMLLoader(Start.class.getResource("ViewOffice.fxml"));
-                Scene scene = new Scene(fxmlLoader.load()) ;
-                ViewOfficeController ctrl=fxmlLoader.getController();
+            FXMLLoader fxmlLoader = new FXMLLoader(Start.class.getResource("ViewOffice.fxml"));
+            Scene scene = new Scene(fxmlLoader.load()) ;
+            ViewOfficeController ctrl=fxmlLoader.getController();
+            var found =this.service.login(new Office(input_username.getText(),input_passwd.getText()), ctrl);
+            if(found==null){
+                throw new ServiceException("Login failed");
+            }
                 ctrl.setService(service);
                 ctrl.setUser(found);
-
                 Stage stage=new Stage();
                 stage.setScene(scene);
                 stage.setResizable(false);
                 stage.show();
                 this.exitScene(mouseEvent);
-            }
+
         } catch (ServiceException | IOException ex) {
             popup(Type.WARNING,"Error",ex.getMessage());
         }

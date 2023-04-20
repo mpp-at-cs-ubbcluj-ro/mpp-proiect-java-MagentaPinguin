@@ -25,25 +25,16 @@ public class Trial extends Entity<Long> {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public int getMinAge() {
         return minAge;
     }
 
-    public void setMinAge(int minAge) {
-        this.minAge = minAge;
-    }
 
     public int getMaxAge() {
         return maxAge;
     }
 
-    public void setMaxAge(int maxAge) {
-        this.maxAge = maxAge;
-    }
 
     @Override
     public boolean equals(Object o) {

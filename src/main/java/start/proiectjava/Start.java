@@ -5,15 +5,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import start.repository.*;
-import start.repository.interfaces.IEnrolledRepository;
-import start.repository.interfaces.IOfficeRepository;
-import start.repository.interfaces.IParticipantRepository;
-import start.repository.interfaces.ITrialRepository;
 import start.service.*;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.SQLException;
+
 import java.util.Properties;
 
 public class Start extends Application {

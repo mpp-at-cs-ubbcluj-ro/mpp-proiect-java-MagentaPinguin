@@ -1,14 +1,14 @@
 package start.service.dtos;
 
-import start.domain.Participant;
+
 import start.domain.Trial;
 
-import java.util.List;
+
 
 public class DtoTrial {
 
-    private Trial trial;
-    private int nrOfEnrollments;
+    private final Trial trial;
+    private final int nrOfEnrollments;
 
     public DtoTrial(Trial trial, int nrOfEnrollments) {
         this.trial = trial;
@@ -27,13 +27,7 @@ public class DtoTrial {
         return trial.getName();
     }
 
-    public int getMinAge() {
-        return trial.getMinAge();
-    }
 
-    public int getMaxAge() {
-        return trial.getMaxAge();
-    }
 
 
 }

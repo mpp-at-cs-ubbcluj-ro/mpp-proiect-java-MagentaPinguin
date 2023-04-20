@@ -1,23 +1,20 @@
 package start.service;
 
-import javafx.scene.control.TextField;
+
 import start.domain.Participant;
 import start.domain.Trial;
 import start.service.dtos.DtoTrial;
-import start.service.interfaces.IEnrollmentService;
-import start.service.interfaces.IOfficeService;
-import start.service.interfaces.IParticipantService;
-import start.service.interfaces.ITrialService;
+import start.service.interfaces.*;
 
 import java.util.List;
 
 
-public class Service {
+public class Service implements IService {
 
-    private IOfficeService serviceOffice;
-    private IParticipantService serviceParticipant;
-    private ITrialService serviceTrial;
-    private IEnrollmentService serviceEnrollment;
+    private final IOfficeService serviceOffice;
+    private final IParticipantService serviceParticipant;
+    private final ITrialService serviceTrial;
+    private final IEnrollmentService serviceEnrollment;
 
     public Service(ServiceOffice serviceOffice, ServiceParticipant serviceParticipant, ServiceTrial serviceTrial, ServiceEnrollment serviceEnrollment) {
         this.serviceOffice = serviceOffice;
@@ -56,18 +53,20 @@ public class Service {
     }
 
 
-    public void addParticipant(TextField inputFullName, TextField inputCnp, TextField inputAge) throws ServiceException{
-        if(inputFullName.getText().isEmpty() ||inputCnp.getText().isEmpty() ||inputAge.getText().isEmpty())
+    public void addParticipant(String inputFullName, String inputCnp, String inputAge) throws ServiceException{
+        if(inputFullName.isEmpty() ||inputCnp.isEmpty() ||inputAge.isEmpty())
             throw new ServiceException("Missing arguments");
 
-        serviceParticipant.addParticipant(inputFullName.getText(),
-                inputCnp.getText(),
-                Integer.parseInt(inputAge.getText()));
+        serviceParticipant.addParticipant(inputFullName,
+                inputCnp,
+                Integer.parseInt(inputAge));
     }
 
     public void addEnrollment(Participant p, Trial t) throws ServiceException{
-            if(serviceEnrollment.getTrialsFor(p).contains(t))
-                throw new ServiceException("Already enrolled at "+t.getName());
+            if(serviceEnrollment.getTrialsFor(p).contains(t)) {
+                var str = "Already enrolled at " + t.getName();
+                throw new ServiceException(str);
+            }
             serviceEnrollment.addEnrollment(p,t);
 
 

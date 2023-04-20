@@ -10,7 +10,7 @@ import start.service.interfaces.IOfficeService;
 public class ServiceOffice implements IOfficeService {
 
     private static final Logger logger = LogManager.getLogger();
-    private IOfficeRepository officeRepository;
+    private final IOfficeRepository officeRepository;
     public ServiceOffice(IOfficeRepository repository) {
         officeRepository=repository;
     }

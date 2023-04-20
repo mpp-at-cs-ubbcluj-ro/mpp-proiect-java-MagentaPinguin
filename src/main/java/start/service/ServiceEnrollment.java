@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ServiceEnrollment implements IEnrollmentService    {
     private static final Logger logger = LogManager.getLogger();
-    private IEnrolledRepository enrolledRepository;
+    private final IEnrolledRepository enrolledRepository;
 
     public ServiceEnrollment(IEnrolledRepository repository) {
         logger.traceEntry("Params {0}:",repository);

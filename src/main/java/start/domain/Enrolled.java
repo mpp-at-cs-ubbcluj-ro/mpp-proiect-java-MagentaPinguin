@@ -14,12 +14,6 @@ public class Enrolled extends Entity<Long> {
         this.trial = trial;
     }
 
-    public Enrolled(Long aLong, Participant participant, Trial trial) {
-        super(aLong);
-        this.participant = participant;
-        this.trial = trial;
-    }
-
     public Participant getParticipant() {
         return participant;
     }

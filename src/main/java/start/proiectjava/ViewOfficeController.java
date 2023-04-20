@@ -1,10 +1,9 @@
 package start.proiectjava;
 
-import javafx.beans.property.SimpleIntegerProperty;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -23,7 +22,7 @@ public class ViewOfficeController extends AbstractController {
     public TableColumn<DtoTrial,String> col_maxTrial;
     public TableColumn<DtoTrial,String> col_minTrial;
     public TableColumn<DtoTrial,String> col_nr;
-    private ObservableList<DtoTrial> model_trials= FXCollections.observableArrayList();
+    private final ObservableList<DtoTrial> model_trials= FXCollections.observableArrayList();
     //---------------------------------------------------------- Tabel office
     public Button add_participant;
     public TextField input_fullName;
@@ -34,22 +33,28 @@ public class ViewOfficeController extends AbstractController {
     public TableView<Participant> table_participant;
     public TableColumn<Participant,String> col_nameParticipant;
     public TableColumn<Participant,Integer> col_ageParticipant;
-    private ObservableList<Participant> model_participant= FXCollections.observableArrayList();
+    private final ObservableList<Participant> model_participant= FXCollections.observableArrayList();
     //----------------------------------------------------------
     public TextArea result_area;
     //----------------------------------------------------------
 
-    void getModels(){
+    void getModelParticipant(){
 
         try {
-           model_participant.setAll(service.getParticipants());
-           var c=service.getTrials();
-
-            model_trials.setAll(c);
+            model_participant.setAll(service.getParticipants());
         } catch (ServiceException e) {
             popup(Type.WARNING,"ERROR",e.toString());
         }
     }
+    void getModelTrial(){
+
+        try {
+            model_trials.setAll(service.getTrials());
+        } catch (ServiceException e) {
+            popup(Type.WARNING,"ERROR",e.toString());
+        }
+    }
+
 
     @FXML
     void initialize(){
@@ -72,7 +77,7 @@ public class ViewOfficeController extends AbstractController {
         try {
             var trial=table_trial.getSelectionModel().getSelectedItem();
 
-            if(trial.getTrial()!=null){
+            if(trial!=null){
                 var resultString = service.getEnrolledAt(trial.getTrial()).
                         stream().
                         map(e -> "Name: " + e.getName() + " || Age: " + e.getAge()).collect(Collectors.joining("\n"));
@@ -90,13 +95,14 @@ public class ViewOfficeController extends AbstractController {
     @Override
     void setService(Service s) {
         super.setService(s);
-        getModels();
+        getModelParticipant();
+        getModelTrial();
     }
 
-    public void addParticipant(ActionEvent actionEvent) {
+    public void addParticipant() {
         try {
-            service.addParticipant(input_fullName,input_cnp,input_age);
-            getModels(); //! Update inplace
+            service.addParticipant(input_fullName.getText(),input_cnp.getText(),input_age.getText());
+            getModelParticipant(); //! Update inplace
             input_fullName.clear();
             input_cnp.clear();
             input_age.clear();
@@ -107,7 +113,7 @@ public class ViewOfficeController extends AbstractController {
 
     }
 
-    public void inscriere(ActionEvent actionEvent) {
+    public void inscriere() {
         try{
            var p=table_participant.getSelectionModel().getSelectedItem();
 
@@ -121,6 +127,7 @@ public class ViewOfficeController extends AbstractController {
            if( service.getTrialsFor(p).size() ==2)
                throw new ServiceException("The participant has achieve the maximum nr. of enrollments!");
            service.addEnrollment(p,t);
+           getModelTrial();
            modifyText();
 
         }catch (ServiceException ex ){

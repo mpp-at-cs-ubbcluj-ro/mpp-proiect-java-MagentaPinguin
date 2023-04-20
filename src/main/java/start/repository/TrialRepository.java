@@ -163,30 +163,6 @@ public class TrialRepository implements ITrialRepository {
     }
 
     @Override
-    public List<Trial> findByName(String name) throws RepositoryException {
-        logger.traceEntry("Params{}",name);
-        List<Trial> list=new ArrayList<>();
-        String sqlUpdate="SELECT  * from trials where name=?";
-        try(var connection= dbConnection.getConnection();
-            var statement=connection.prepareStatement(sqlUpdate)){
-            statement.setObject(1,name);
-            var result=statement.executeQuery();
-            while(result.next()) {
-                var item = new Trial(
-                        result.getString("name"),
-                        result.getInt("min_age"),
-                        result.getInt("max_age"));
-                item.setId(result.getLong("id_trial"));
-                list.add(item);
-            }
-            logger.traceExit("Find successful");
-            return list;
-        } catch (SQLException | IOException e) {
-            throw logger.throwing(new RepositoryException(e));
-        }
-    }
-
-    @Override
     public List<Trial> getTrialsForAge(int age) throws RepositoryException {
         logger.traceEntry("Params{}");
         List<Trial> list=new ArrayList<>();

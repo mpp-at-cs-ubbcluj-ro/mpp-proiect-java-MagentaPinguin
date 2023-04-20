@@ -26,25 +26,16 @@ public class Participant extends Entity<Long> {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getCnp() {
         return cnp;
     }
 
-    public void setCnp(String cnp) {
-        this.cnp = cnp;
-    }
 
     public int getAge() {
         return age;
     }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
 
     @Override
     public boolean equals(Object o) {

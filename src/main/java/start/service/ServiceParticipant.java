@@ -12,7 +12,7 @@ import java.util.List;
 public class ServiceParticipant implements IParticipantService {
 
     private static final Logger logger = LogManager.getLogger();
-    private IParticipantRepository participantRepository;
+    private final  IParticipantRepository participantRepository;
     public ServiceParticipant(IParticipantRepository repository) {
         participantRepository=repository;
     }

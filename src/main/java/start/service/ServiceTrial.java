@@ -28,16 +28,4 @@ public class ServiceTrial implements ITrialService {
         }
     }
 
-    public void addTrial(String text, int min, int max) throws ServiceException {
-        logger.traceEntry("Params {0} {1},{2}", text, min, max);
-        try {
-            if (trialRepository.getSpecificTrial(text, min, max).isPresent())
-                throw new ServiceException("Trial already exist");
-            trialRepository.add(new Trial(text, min, max));
-
-        } catch (RepositoryException e) {
-            throw logger.throwing(new ServiceException(e));
-        }
-
-    }
 }

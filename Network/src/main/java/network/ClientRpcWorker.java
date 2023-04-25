@@ -14,8 +14,8 @@ import java.util.List;
 
 public class ClientRpcWorker implements Runnable, IObserver {
 
-    private IClientServices server;
-    private Socket connection;
+    private final IClientServices server;
+    private final Socket connection;
     private ObjectInputStream input;
     private ObjectOutputStream output;
     private volatile boolean connected;
@@ -179,10 +179,16 @@ public class ClientRpcWorker implements Runnable, IObserver {
     }
 
 
- /*   @Override
-    public void updateTrials() {
-
-    }*/
+    @Override
+    public void updateTrials() throws ServiceException {
+        Response resp=new Response.Builder().type(ResponseType.ENROLL_ADDED).build();
+        System.out.println("Update received ");
+        try {
+            sendResponse(resp);
+        } catch (IOException e) {
+            throw new ServiceException("Sending error: "+e);
+        }
+    }
 
     @Override
     public void updateParticipants(Participant p) throws ServiceException {

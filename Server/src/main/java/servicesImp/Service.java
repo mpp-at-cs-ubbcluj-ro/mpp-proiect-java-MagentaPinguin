@@ -15,10 +15,10 @@ import java.util.concurrent.Executors;
 
 public class Service implements IClientServices {
 
-    private IOfficeRepository officeRepository;
-    private IParticipantRepository participantRepository;
-    private ITrialRepository trialRepository;
-    private IEnrolledRepository enrolledRepository;
+    private final IOfficeRepository officeRepository;
+    private final IParticipantRepository participantRepository;
+    private final ITrialRepository trialRepository;
+    private final IEnrolledRepository enrolledRepository;
 
     Map<Long, IObserver> clients;
 
@@ -87,7 +87,8 @@ public class Service implements IClientServices {
         try {
             if( participantRepository.findByCnp(p.getCnp()).isEmpty()){
                 participantRepository.add(p);
-                notifyAboutParticipants(p);
+                var added_p=participantRepository.findByCnp(p.getCnp());
+                notifyAboutParticipants(added_p.get());
             }
         } catch (RepositoryException e) {
             throw new ServiceException(e);
@@ -139,7 +140,27 @@ public class Service implements IClientServices {
     }
 
     private void notifyAboutEnrollments() {
+        Iterable<Office> offices= null;
+        try {
+            offices = officeRepository.getAll();
+        } catch (RepositoryException e) {
+            System.out.println("Error getAll office");
+        }
+        ExecutorService executor= Executors.newFixedThreadPool(5);
+        for(Office of :offices){
+            IObserver chatClient=clients.get(of.getId());
+            if (chatClient!=null)
+                executor.execute(() -> {
+                    try {
+                        System.out.println("Notifying ["+of.getId()+"] about a participant");
+                        chatClient.updateTrials();
+                    } catch (Exception e) {
+                        System.out.println("Error notifying friend " + e);
+                    }
+                });
 
+        }
+        executor.shutdown();
     }
 
     @Override

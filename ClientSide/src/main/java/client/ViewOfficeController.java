@@ -44,6 +44,18 @@ public class ViewOfficeController extends AbstractController implements IObserve
 
 
     @Override
+    public void updateTrials() {
+        Platform.runLater(() -> {
+            try {
+                model_trials.setAll(service.getTrials());
+            } catch (ServiceException e) {
+                popup(Type.WARNING,"ERROR",e.getMessage());
+            }
+            }
+
+        );
+    }
+    @Override
     public void updateParticipants( Participant p) {
     Platform.runLater(() -> {
             System.out.println("Am ajuns aici");
@@ -135,7 +147,6 @@ public class ViewOfficeController extends AbstractController implements IObserve
            if(x== 2)
                throw new ServiceException("The participant has achieve the maximum nr. of enrollments!");
             service.addEnroll(p,t.getTrial());
-            //updateTrials();
 
         }catch (ServiceException ex ){
            popup(Type.WARNING,"WARNING",ex.getMessage());

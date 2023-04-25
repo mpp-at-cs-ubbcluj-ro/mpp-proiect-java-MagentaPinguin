@@ -1,10 +1,9 @@
 package services;
 
 import model.Participant;
-import model.Trial;
 
 public interface IObserver {
-    //void updateTrials(Trial t);
+    void updateTrials() throws ServiceException;
 
     void updateParticipants(Participant p) throws ServiceException;
 }

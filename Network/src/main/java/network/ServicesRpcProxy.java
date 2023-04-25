@@ -27,7 +27,7 @@ public class ServicesRpcProxy implements IClientServices {
     private ObjectOutputStream output;
     private Socket connection;
 
-    private BlockingQueue<Response> qresponses;
+    private final BlockingQueue<Response> qresponses;
     private volatile boolean finished;
 
     public ServicesRpcProxy(String host, int port) {
@@ -77,7 +77,6 @@ public class ServicesRpcProxy implements IClientServices {
         }
         if (response.type() == ResponseType.ERROR) {
             String err = response.data().toString();
-            closeConnection();
             throw new ServiceException(err);
         }
         return null;
@@ -94,7 +93,7 @@ public class ServicesRpcProxy implements IClientServices {
         }
         if (response.type() == ResponseType.ERROR) {
             String err = response.data().toString();
-            closeConnection();
+
             throw new ServiceException(err);
         }
         return null;
@@ -108,7 +107,7 @@ public class ServicesRpcProxy implements IClientServices {
         Response response = readResponse();
         if (response.type() == ResponseType.ERROR) {
             String err = response.data().toString();
-            closeConnection();
+
             throw new ServiceException(err);
         }
     }
@@ -121,7 +120,6 @@ public class ServicesRpcProxy implements IClientServices {
 
         if (response.type() == ResponseType.ERROR) {
             String err = response.data().toString();
-            closeConnection();
             throw new ServiceException(err);
         }
         return (int) response.data();
@@ -134,7 +132,6 @@ public class ServicesRpcProxy implements IClientServices {
         Response response = readResponse();
         if (response.type() == ResponseType.ERROR) {
             String err = response.data().toString();
-            closeConnection();
             throw new ServiceException(err);
         }
     }
@@ -148,7 +145,6 @@ public class ServicesRpcProxy implements IClientServices {
             return (List<Participant>) response.data();
         }
         String err = response.data().toString();
-        closeConnection();
         throw new ServiceException(err);
     }
 
@@ -220,7 +216,7 @@ public class ServicesRpcProxy implements IClientServices {
 
         if (response.type()== ResponseType.ENROLL_ADDED){
             System.out.println("Update on enrollments");
-           // client.updateTrials();
+            client.updateTrials();
         }
 
 

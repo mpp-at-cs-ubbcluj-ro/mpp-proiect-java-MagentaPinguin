@@ -55,7 +55,7 @@ public class ServicesRpcProxy implements IClientServices {
     }
 
     @Override
-    public void logout(Office office, IObserver client) throws ServiceException {
+    public void logout(Office office) throws ServiceException {
         Request req = new Request.Builder().type(RequestType.LOGOUT).data(office).build();
         sendRequest(req);
         Response response = readResponse();
@@ -100,9 +100,10 @@ public class ServicesRpcProxy implements IClientServices {
     }
 
     @Override
-    public void addParticipant(Participant p) throws ServiceException {
+    public void addParticipant(String name, String cnp, int age ) throws ServiceException {
 
-        Request req = new Request.Builder().type(RequestType.ADD_PARTICIPANT).data(p).build();
+        var list = List.of(name,cnp,age);
+        Request req = new Request.Builder().type(RequestType.ADD_PARTICIPANT).data(list).build();
         sendRequest(req);
         Response response = readResponse();
         if (response.type() == ResponseType.ERROR) {
@@ -113,8 +114,8 @@ public class ServicesRpcProxy implements IClientServices {
     }
 
     @Override
-    public int getTrialsFor(Participant p) throws ServiceException {
-        Request req = new Request.Builder().type(RequestType.GET_TrialsFor).data(p).build();
+    public List<Trial> GetEnrollmentsFor(long id_p) throws ServiceException {
+        Request req = new Request.Builder().type(RequestType.GET_TrialsFor).data(id_p).build();
         sendRequest(req);
         Response response = readResponse();
 
@@ -122,11 +123,11 @@ public class ServicesRpcProxy implements IClientServices {
             String err = response.data().toString();
             throw new ServiceException(err);
         }
-        return (int) response.data();
+        return (List<Trial>) response.data();
     }
 
     @Override
-    public void addEnroll(Participant p, Trial t) throws ServiceException {
+    public void addEnroll(long p, long t) throws ServiceException {
         Request req = new Request.Builder().type(RequestType.ADD_ENROLL).data(List.of(p, t)).build();
         sendRequest(req);
         Response response = readResponse();
@@ -137,8 +138,8 @@ public class ServicesRpcProxy implements IClientServices {
     }
 
     @Override
-    public List<Participant> getEnrolledAt(Trial trial) throws ServiceException {
-        Request req = new Request.Builder().type(RequestType.GET_EnrolledAt).data(trial).build();
+    public List<Participant> getEnrolledAt(long id_trial) throws ServiceException {
+        Request req = new Request.Builder().type(RequestType.GET_EnrolledAt).data(id_trial).build();
         sendRequest(req);
         Response response = readResponse();
         if (response.type() == ResponseType.OK) {

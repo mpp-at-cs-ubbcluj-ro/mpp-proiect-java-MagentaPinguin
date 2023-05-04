@@ -85,7 +85,7 @@ public class ClientRpcWorker implements Runnable, IObserver {
             System.out.println("Logout request");
             Office user= (Office) request.data();
             try {
-                server.logout(user, this);
+                server.logout(user);
                 connected=false;
                 return okResponse;
 
@@ -125,7 +125,11 @@ public class ClientRpcWorker implements Runnable, IObserver {
        if (request.type()== RequestType.ADD_PARTICIPANT){
             System.out.println("ADD_Participant request");
             try {
-                server.addParticipant((Participant) request.data());
+                List<Object> data=(List<Object>)request.data();
+                String name=(String) data.get(0);
+                String cnp=(String) data.get(1);
+                int age=(int)data.get(2);
+                server.addParticipant(name,cnp,age);
                 return okResponse;
             } catch (ServiceException e) {
                 connected=false;
@@ -137,7 +141,7 @@ public class ClientRpcWorker implements Runnable, IObserver {
             System.out.println("ADD_Participant request");
             try {
                return new Response.Builder().type(ResponseType.OK)
-                       .data(server.getTrialsFor((Participant) request.data())).build();
+                       .data(server.GetEnrollmentsFor((long) request.data())).build();
             } catch (ServiceException e) {
                 connected=false;
                 return new Response.Builder().type(ResponseType.ERROR).data(e.getMessage()).build();
@@ -149,7 +153,7 @@ public class ClientRpcWorker implements Runnable, IObserver {
             System.out.println("Enroll add request");
             try {
                 var x = (List)request.data();
-                server.addEnroll((Participant) x.get(0),(Trial) x.get(1));
+                server.addEnroll((long) x.get(0),(long) x.get(1));
                 return okResponse;
             } catch (ServiceException e) {
                 connected=false;
@@ -160,8 +164,7 @@ public class ClientRpcWorker implements Runnable, IObserver {
         if (request.type()== RequestType.GET_EnrolledAt){
             System.out.println("Enrollment  at request");
             try {
-                var t = (Trial) request.data();
-                var list=server.getEnrolledAt(t);
+                var list=server.getEnrolledAt((long) request.data());
                 return new Response.Builder().type(ResponseType.OK).data(list).build();
             } catch (ServiceException e) {
                 connected=false;

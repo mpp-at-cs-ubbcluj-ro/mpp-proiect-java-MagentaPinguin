@@ -45,25 +45,10 @@ public class EnrolledRepository implements IEnrolledRepository {
 
     }
 
+    @Deprecated
     @Override
-    public void delete(Long itemID) throws RepositoryException {
-        logger.traceEntry("Params {}", itemID);
-        String sqlAdd = "DELETE from enrollments where id_enroll=?";
-        Connection connection;
-        try {
-            connection=dbConnection.getConnection();
-        } catch (IOException | SQLException e) {
-            throw logger.throwing(new RepositoryException(e));
-        }
 
-        try (var statement = connection.prepareStatement(sqlAdd)) {
-            statement.setObject(1, itemID);
-            statement.execute();
-            logger.traceExit("Delete success.");
-        } catch (SQLException e) {
-            throw logger.throwing(new RepositoryException(e));
-        }
-    }
+    public void delete(Long itemID) throws RepositoryException {}
 
     @Deprecated
     @Override
@@ -73,7 +58,7 @@ public class EnrolledRepository implements IEnrolledRepository {
     @Deprecated
     @Override
     public Optional<Enrolled> find(Long itemID) throws RepositoryException {
-        return Optional.empty();
+        return null;
     }
 
     @Override

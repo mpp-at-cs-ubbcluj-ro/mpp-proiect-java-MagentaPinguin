@@ -31,7 +31,7 @@ public class RpcServer {
         IEnrolledRepository enrolledRepository=new EnrolledRepository(serverProps);
 
         IClientServices serverImpl=new Service(officeRepository, participantRepository,trialRepository,enrolledRepository);
-        AbstractServer server = new RpcConcurrentServer(serverPort, serverImpl);
+        AbstractServer server = new ProtoConcurrentServer(serverPort, serverImpl);
 
         try {
             server.start();

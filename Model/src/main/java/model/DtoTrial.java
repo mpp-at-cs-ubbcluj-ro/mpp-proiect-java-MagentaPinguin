@@ -12,6 +12,9 @@ public class DtoTrial implements Serializable {
         this.nrOfEnrollments = nrOfEnrollments;
     }
 
+    public long getId() {
+        return trial.getId();
+    }
     public Trial getTrial() {
         return trial;
     }

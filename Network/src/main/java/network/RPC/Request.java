@@ -1,4 +1,4 @@
-package services;
+package network.RPC;
 
 import java.io.Serializable;
 

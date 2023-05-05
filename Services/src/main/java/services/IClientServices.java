@@ -14,11 +14,14 @@ public interface IClientServices {
         //Log
         List<Participant> getParticipants() throws ServiceException;
         List<DtoTrial> getTrials()throws ServiceException;
+
         List<Trial> GetEnrollmentsFor(long  id_participant) throws  ServiceException;
         List<Participant> getEnrolledAt(long id_trial) throws ServiceException;
+
         //Getters
         void addParticipant(String fullname, String cnp, int age) throws  ServiceException;
-        void addEnroll(long id_participant, long id_trial) throws ServiceException;
+        void
+        addEnroll(long id_participant, long id_trial) throws ServiceException;
         //Add
 
 }

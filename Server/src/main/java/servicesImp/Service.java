@@ -49,6 +49,7 @@ public class Service implements IClientServices {
 
     @Override
     public synchronized void logout(Office office) throws ServiceException {
+        System.out.println(office);
         IObserver localClient=clients.remove(office.getId());
         if(localClient==null)
             throw new ServiceException("Not logged");

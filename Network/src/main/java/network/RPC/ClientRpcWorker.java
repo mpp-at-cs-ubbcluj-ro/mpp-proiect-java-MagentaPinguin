@@ -1,8 +1,7 @@
-package network;
+package network.RPC;
 
 import model.Office;
 import model.Participant;
-import model.Trial;
 import services.*;
 
 import java.io.IOException;

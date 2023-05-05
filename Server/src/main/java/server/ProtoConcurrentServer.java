@@ -1,23 +1,23 @@
 package server;
 
-import network.RPC.ClientRpcWorker;
+import network.Proto.ClientProtoWorker;
 import services.IClientServices;
 
 import java.net.Socket;
 
 
-public class RpcConcurrentServer extends AbstractConcurrentServer {
+public class ProtoConcurrentServer extends AbstractConcurrentServer {
     private IClientServices chatServer;
-    public RpcConcurrentServer(int port, IClientServices chatServer) {
+    public ProtoConcurrentServer(int port, IClientServices chatServer) {
         super(port);
         this.chatServer = chatServer;
-        System.out.println("RpcConcurrentServer");
+        System.out.println("ProtoSERVER START");
     }
 
     @Override
     protected Thread createWorker(Socket client) {
         // ChatClientRpcWorker worker=new ChatClientRpcWorker(chatServer, client);
-        ClientRpcWorker worker=new ClientRpcWorker(chatServer, client);
+        ClientProtoWorker worker=new ClientProtoWorker(chatServer, client);
 
         Thread tw=new Thread(worker);
         return tw;

@@ -29,6 +29,7 @@ public class LogInController extends AbstractController{
             Scene scene = new Scene(fxmlLoader.load()) ;
             ViewOfficeController ctrl=fxmlLoader.getController();
             var found =this.service.login(new Office(input_username.getText(),input_passwd.getText()), ctrl);
+
             if(found==null){
                 throw new ServiceException("Login failed");
             }

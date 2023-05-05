@@ -52,15 +52,12 @@ public class ViewOfficeController extends AbstractController implements IObserve
                 popup(Type.WARNING,"ERROR",e.getMessage());
             }
             }
-
         );
     }
     @Override
     public void updateParticipants( Participant p) {
     Platform.runLater(() -> {
-            System.out.println("Am ajuns aici");
-                model_participant.add(p);
-                System.out.println("Am ajuns aici 2");}
+        model_participant.add(p);}
         );
     }
 
@@ -112,12 +109,12 @@ public class ViewOfficeController extends AbstractController implements IObserve
     @Override
     void setService(IClientServices s) {
         this.service=s;
-        try {
+       try {
             model_participant.setAll(service.getParticipants());
             model_trials.setAll(service.getTrials());
         } catch (ServiceException e) {
             popup(Type.WARNING,"Error",e.getMessage());
-        } // Get initial values
+        } // Get initial values*/
     }
 
     public void addParticipant(ActionEvent actionEvent) {
@@ -136,16 +133,22 @@ public class ViewOfficeController extends AbstractController implements IObserve
     public void inscriere(ActionEvent actionEvent) {
 
         try{
+
            var p=table_participant.getSelectionModel().getSelectedItem();
+
            if(p == null)
                throw new ServiceException("Please select a participant!");
            var t=table_trial.getSelectionModel().getSelectedItem();
+
            if(t == null)
                throw new ServiceException("Please select a trial!");
 
            var x=service.GetEnrollmentsFor(p.getId());
 
-           if(x.size()==2)
+           if(x.contains(t.getTrial()))
+                throw new ServiceException("Already an attende!");
+
+            if(x.size()==2)
                throw new ServiceException("The participant has achieve the maximum nr. of enrollments!");
             service.addEnroll(p.getId(),t.getTrial().getId());
 
@@ -156,6 +159,7 @@ public class ViewOfficeController extends AbstractController implements IObserve
 
     public void logout(ActionEvent actionEvent) {
         try {
+
             service.logout(user);
             exitScene(actionEvent);
 

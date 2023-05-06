@@ -2,11 +2,11 @@ package client;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import network.Proto.ServicesProtoProxy;
 import services.IClientServices;
-import network.ServicesRpcProxy;
+import network.RPC.ServicesRpcProxy;
 
 
 import java.io.IOException;
@@ -33,7 +33,8 @@ public class Start extends Application {
         System.out.println("Using server IP " + serverIP);
         System.out.println("Using server port " + serverPort);
 
-        IClientServices service= new ServicesRpcProxy(serverIP,serverPort);
+       // IClientServices service= new ServicesRpcProxy(serverIP,serverPort);
+        IClientServices service= new ServicesProtoProxy(serverIP,serverPort);
 
         FXMLLoader loginLoader = new FXMLLoader(Start.class.getResource("LogIn.fxml"));
         Scene scene = new Scene(loginLoader.load());

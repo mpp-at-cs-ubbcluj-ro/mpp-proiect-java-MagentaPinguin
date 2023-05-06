@@ -48,43 +48,14 @@ public class TrialRepository implements ITrialRepository {
     }
 
     @Override
+    @Deprecated
     public void delete(Long itemID) throws RepositoryException {
-        logger.traceEntry("Params: {}",itemID);
-        String sqlAdd="DELETE from trials where id_trial=?";
-
-        Connection connection;
-        try {
-            connection=dbConnection.getConnection();
-        } catch (IOException | SQLException e) {
-            throw logger.throwing(new RepositoryException(e));
-        }
-
-        try(
-            var statement=connection.prepareStatement(sqlAdd)){
-            statement.setObject(1,itemID);
-            statement.execute();
-            logger.traceEntry("Delete successful");
-        } catch (SQLException ex) {
-            throw logger.throwing(new RepositoryException(ex));
-        }
     }
 
     @Override
+    @Deprecated
     public void update(Trial item) throws RepositoryException {
-        logger.traceEntry("Params: {}",item);
-        String sqlAdd="Update trials set name=?,min_age=?,max_age=? where id_trial=?";
-        try(var connection = dbConnection.getConnection();
-            var statement=connection.prepareStatement(sqlAdd)){
 
-            statement.setObject(1,item.getName());
-            statement.setObject(2,item.getMinAge());
-            statement.setObject(3,item.getMaxAge());
-            statement.setObject(4,item.getId());
-            statement.execute();
-            logger.traceEntry("Update successful");
-        } catch (SQLException | IOException ex) {
-            throw logger.throwing(new RepositoryException(ex));
-        }
     }
     @Override
     public Optional<Trial> find(Long itemID) throws RepositoryException {

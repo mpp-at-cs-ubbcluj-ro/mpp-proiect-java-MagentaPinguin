@@ -5,21 +5,23 @@ import model.Office;
 import model.Participant;
 import model.Trial;
 
-import java.util.Arrays;
-import java.util.Collection;
+
 import java.util.List;
 
 public interface IClientServices {
         Office login(Office office, IObserver observer) throws  ServiceException;
-        void logout(Office office, IObserver observer) throws  ServiceException;
+        void logout(Office office ) throws  ServiceException;
+        //Log
         List<Participant> getParticipants() throws ServiceException;
         List<DtoTrial> getTrials()throws ServiceException;
 
-        void addParticipant(Participant p) throws  ServiceException;
+        List<Trial> GetEnrollmentsFor(long  id_participant) throws  ServiceException;
+        List<Participant> getEnrolledAt(long id_trial) throws ServiceException;
 
-        int getTrialsFor(Participant p) throws  ServiceException;
+        //Getters
+        void addParticipant(String fullname, String cnp, int age) throws  ServiceException;
+        void
+        addEnroll(long id_participant, long id_trial) throws ServiceException;
+        //Add
 
-        void addEnroll(Participant p, Trial t) throws ServiceException;
-
-        List<Participant> getEnrolledAt(Trial trial) throws ServiceException;
 }

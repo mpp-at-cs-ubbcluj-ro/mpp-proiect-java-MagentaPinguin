@@ -6,7 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import services.IClientServices;
-import services.IObserver;
+
 
 
 public abstract class AbstractController {

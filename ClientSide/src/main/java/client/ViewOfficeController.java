@@ -15,6 +15,7 @@ import services.IObserver;
 import services.ServiceException;
 
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ViewOfficeController extends AbstractController implements IObserver {
@@ -44,11 +45,16 @@ public class ViewOfficeController extends AbstractController implements IObserve
 
 
     @Override
+    public void updateTrials(List<DtoTrial> newList) {
+        Platform.runLater(() -> {
+                model_trials.setAll(newList);
+            }
+        );
+    }
+    @Override
     public void updateParticipants( Participant p) {
     Platform.runLater(() -> {
-            System.out.println("Am ajuns aici");
-                model_participant.add(p);
-                System.out.println("Am ajuns aici 2");}
+        model_participant.add(p);}
         );
     }
 
@@ -82,7 +88,7 @@ public class ViewOfficeController extends AbstractController implements IObserve
             var trial=table_trial.getSelectionModel().getSelectedItem();
 
             if(trial!=null){
-                var resultString = service.getEnrolledAt(trial.getTrial()).
+                var resultString = service.getEnrolledAt(trial.getTrial().getId()).
                         stream().
                         map(e -> "Name: " + e.getName() + " || Age: " + e.getAge()).collect(Collectors.joining("\n"));
                 result_area.setText("Enrollments: \n" + resultString);
@@ -100,17 +106,17 @@ public class ViewOfficeController extends AbstractController implements IObserve
     @Override
     void setService(IClientServices s) {
         this.service=s;
-        try {
+       try {
             model_participant.setAll(service.getParticipants());
             model_trials.setAll(service.getTrials());
-        } catch (ServiceException e) {
+        } catch (Exception e) {
             popup(Type.WARNING,"Error",e.getMessage());
         } // Get initial values
     }
 
     public void addParticipant(ActionEvent actionEvent) {
         try {
-            service.addParticipant(new Participant(input_fullName.getText(),input_cnp.getText(),Integer.parseInt(input_age.getText())));
+            service.addParticipant(input_fullName.getText(),input_cnp.getText(),Integer.parseInt(input_age.getText()));
             input_fullName.clear();
             input_cnp.clear();
             input_age.clear();
@@ -124,18 +130,24 @@ public class ViewOfficeController extends AbstractController implements IObserve
     public void inscriere(ActionEvent actionEvent) {
 
         try{
+
            var p=table_participant.getSelectionModel().getSelectedItem();
+
            if(p == null)
                throw new ServiceException("Please select a participant!");
            var t=table_trial.getSelectionModel().getSelectedItem();
+
            if(t == null)
                throw new ServiceException("Please select a trial!");
-            var x=service.getTrialsFor(p);
 
-           if(x== 2)
+           var x=service.GetEnrollmentsFor(p.getId());
+
+           if(x.contains(t.getTrial()))
+                throw new ServiceException("Already an attende!");
+
+            if(x.size()==2)
                throw new ServiceException("The participant has achieve the maximum nr. of enrollments!");
-            service.addEnroll(p,t.getTrial());
-            //updateTrials();
+            service.addEnroll(p.getId(),t.getTrial().getId());
 
         }catch (ServiceException ex ){
            popup(Type.WARNING,"WARNING",ex.getMessage());
@@ -144,7 +156,8 @@ public class ViewOfficeController extends AbstractController implements IObserve
 
     public void logout(ActionEvent actionEvent) {
         try {
-            service.logout(user,this);
+
+            service.logout(user);
             exitScene(actionEvent);
 
         } catch (ServiceException e) {

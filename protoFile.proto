@@ -1,0 +1,76 @@
+syntax="proto3";
+package network.Proto;
+
+
+option java_outer_classname="ProtocolProtobuff";
+ 	
+message Office{
+	
+	int32 id = 1 ;
+	string username = 2;
+	string password = 3;
+}
+
+message Participant{
+	
+	int32 id = 1 ;
+	string name = 2;
+	string cnp = 3;
+	int32 age = 4 ;
+}
+
+message Trial{
+	
+	int32 id = 1 ;
+	string name = 2;
+	int32 minAge = 3 ;
+	int32 maxAge = 4 ;
+}
+
+
+message DtoTrial{
+	
+	Trial trial = 1 ;
+	int32 nrOfEnrollments = 2 ;
+}
+
+
+message Enrolled{
+	int32 id = 1 ;
+	Trial trial = 2 ;
+	Participant participant = 3;
+}
+
+
+message Request{
+	enum Type { Unknown=0; Login=1; Logout=2; GetParticipants=3; GetTrials=4; AddParticipant=5; AddEnroll=6; GetEnrollmentsFor=7; GetEnrolledAt=8; }
+
+	Type type = 1;
+	
+	Office office = 2;
+	//Login/out arg
+
+	string name=3;
+	string cnp=4;
+	int32 age=5;
+	//AddPArticipants args
+
+	int32 idParticipant=6;
+	int32 idTrial=7;
+	//AddPEnroll args
+}
+
+
+message Response{
+	enum Type { Unknown=0; Ok=1; Error=2; Login=3; Logout=4; GetParticipants=5; GetTrials=6; AddParticipant=7;  AddEnroll=8; GetEnrolledAt=9; GetEnrollmentsFor=10; }
+
+	Type type = 1 ;
+	Office office = 2;
+	repeated Participant participants =3;
+	repeated DtoTrial dtoTrials =4;
+	string txt=5;
+	Participant updateParticipant=6;
+	repeated Trial trials =7;
+
+}
+

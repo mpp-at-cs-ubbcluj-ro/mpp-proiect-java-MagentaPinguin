@@ -13,7 +13,7 @@ repositories {
 
 application{
 
-    mainClass='server.RpcServer'
+    mainClass='server.StartServer'
 }
 
 dependencies {

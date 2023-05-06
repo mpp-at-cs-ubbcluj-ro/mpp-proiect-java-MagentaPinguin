@@ -1,7 +1,9 @@
 package network.RPC;
 
+import model.DtoTrial;
 import model.Office;
 import model.Participant;
+import network.Proto.ProtoUtils;
 import services.*;
 
 import java.io.IOException;
@@ -182,8 +184,8 @@ public class ClientRpcWorker implements Runnable, IObserver {
 
 
     @Override
-    public void updateTrials() throws ServiceException {
-        Response resp=new Response.Builder().type(ResponseType.ENROLL_ADDED).build();
+    public void updateTrials(List<DtoTrial> trials) throws ServiceException {
+        Response resp= new Response.Builder().type(ResponseType.ENROLL_ADDED).data(trials).build();
         System.out.println("Update received ");
         try {
             sendResponse(resp);

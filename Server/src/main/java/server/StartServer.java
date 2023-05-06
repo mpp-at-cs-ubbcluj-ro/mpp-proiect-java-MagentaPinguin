@@ -8,13 +8,13 @@ import servicesImp.Service;
 import java.io.IOException;
 import java.util.Properties;
 
-public class RpcServer {
+public class StartServer {
     private static int serverPort=55555;
     public static void main(String[] args) {
         Properties serverProps=new Properties();
 
         try {
-            serverProps.load(RpcServer.class.getResourceAsStream("serverProperties.properties"));
+            serverProps.load(StartServer.class.getResourceAsStream("serverProperties.properties"));
             serverPort = Integer.parseInt(serverProps.getProperty("server.port"));
             System.out.println("Server properties set. ");
             serverProps.list(System.out);

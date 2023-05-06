@@ -1,5 +1,6 @@
 package network.Proto;
 
+import model.DtoTrial;
 import model.Office;
 import model.Participant;
 import network.RPC.RequestType;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.List;
 
 
 public class ClientProtoWorker implements Runnable, IObserver {
@@ -191,8 +193,8 @@ public class ClientProtoWorker implements Runnable, IObserver {
 
 
     @Override
-    public void updateTrials() throws ServiceException {
-        ProtocolProtobuff.Response resp=ProtoUtils.createAddEnrollResponse();
+    public void updateTrials(List<DtoTrial> trials) throws ServiceException {
+        ProtocolProtobuff.Response resp=ProtoUtils.createAddEnrollResponse(trials);
         System.out.println("Update trial received ");
         try {
             sendResponse(resp);

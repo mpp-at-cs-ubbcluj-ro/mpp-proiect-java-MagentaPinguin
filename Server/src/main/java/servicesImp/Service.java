@@ -157,7 +157,7 @@ public class Service implements IClientServices {
                 executor.execute(() -> {
                     try {
                         System.out.println("Notifying ["+of.getId()+"] about a participant");
-                        chatClient.updateTrials();
+                        chatClient.updateTrials(this.getTrials());
                     } catch (Exception e) {
                         System.out.println("Error notifying friend " + e);
                     }

@@ -1,5 +1,6 @@
 package network.Proto;
 import model.*;
+import network.RPC.Response;
 
 import java.util.List;
 
@@ -232,8 +233,11 @@ public class ProtoUtils {
                 .build();
     }
 
-    public static ProtocolProtobuff.Response createAddEnrollResponse() {
-        return ProtocolProtobuff.Response.newBuilder().setType(ProtocolProtobuff.Response.Type.AddEnroll).build();
+    public static ProtocolProtobuff.Response createAddEnrollResponse(List<DtoTrial> trials) {
+        return ProtocolProtobuff.Response .newBuilder()
+                .setType(ProtocolProtobuff.Response.Type.AddEnroll)
+                .addAllDtoTrials(toProtoDtoTrialList(trials))
+                .build();
     }
 
 

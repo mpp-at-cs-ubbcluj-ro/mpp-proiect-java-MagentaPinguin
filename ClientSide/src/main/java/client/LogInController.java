@@ -30,7 +30,7 @@ public class LogInController extends AbstractController{
             ViewOfficeController ctrl=fxmlLoader.getController();
             var found =this.service.login(new Office(input_username.getText(),input_passwd.getText()), ctrl);
 
-            if(found==null){
+            if(found==null || !input_passwd.getText().equals(found.getPassword())){
                 throw new ServiceException("Login failed");
             }
                 ctrl.setService(service);

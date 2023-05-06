@@ -15,6 +15,7 @@ import services.IObserver;
 import services.ServiceException;
 
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ViewOfficeController extends AbstractController implements IObserver {
@@ -44,13 +45,9 @@ public class ViewOfficeController extends AbstractController implements IObserve
 
 
     @Override
-    public void updateTrials() {
+    public void updateTrials(List<DtoTrial> newList) {
         Platform.runLater(() -> {
-            try {
-                model_trials.setAll(service.getTrials());
-            } catch (ServiceException e) {
-                popup(Type.WARNING,"ERROR",e.getMessage());
-            }
+                model_trials.setAll(newList);
             }
         );
     }
@@ -112,9 +109,9 @@ public class ViewOfficeController extends AbstractController implements IObserve
        try {
             model_participant.setAll(service.getParticipants());
             model_trials.setAll(service.getTrials());
-        } catch (ServiceException e) {
+        } catch (Exception e) {
             popup(Type.WARNING,"Error",e.getMessage());
-        } // Get initial values*/
+        } // Get initial values
     }
 
     public void addParticipant(ActionEvent actionEvent) {

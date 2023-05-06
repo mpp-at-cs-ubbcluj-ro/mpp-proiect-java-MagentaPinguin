@@ -217,7 +217,7 @@ public class ServicesRpcProxy implements IClientServices {
 
         if (response.type()== ResponseType.ENROLL_ADDED){
             System.out.println("Update on enrollments");
-            client.updateTrials();
+            client.updateTrials((List<DtoTrial>) response.data());
         }
 
 

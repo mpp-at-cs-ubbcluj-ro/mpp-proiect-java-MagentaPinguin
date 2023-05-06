@@ -116,6 +116,7 @@ public class ServicesProtoProxy implements IClientServices {
         ProtocolProtobuff.Request req = ProtoUtils.createAddEnroll(p,t);
         sendRequest(req);
         ProtocolProtobuff.Response response = readResponse();
+
         if (response.getType() == ProtocolProtobuff.Response.Type.Error) {
             String err = response.getTxt();
             throw new ServiceException(err);
@@ -214,7 +215,7 @@ public class ServicesProtoProxy implements IClientServices {
 
         if (response.getType() == ProtocolProtobuff.Response.Type.AddEnroll){
             System.out.println("Update on enrollments");
-            client.updateTrials();
+            client.updateTrials(ProtoUtils.getDroTrialList(response));
         }
 
 

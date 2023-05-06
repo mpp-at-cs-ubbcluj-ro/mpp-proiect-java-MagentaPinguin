@@ -3,8 +3,7 @@ package network.Proto;
 
 
 option java_outer_classname="ProtocolProtobuff";
-
-
+ 	
 message Office{
 	
 	int32 id = 1 ;

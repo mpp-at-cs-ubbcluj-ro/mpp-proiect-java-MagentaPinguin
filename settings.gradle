@@ -5,4 +5,6 @@ include 'Model'
 include 'Persistence'
 include 'Network'
 include 'Server'
+include 'resources'
+include 'resources'
 

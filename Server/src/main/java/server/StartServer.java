@@ -1,6 +1,7 @@
 package server;
 
 import repository.*;
+import repository.orm.OfficeRepositoryOrm;
 import services.IClientServices;
 import services.ServiceException;
 import servicesImp.Service;
@@ -25,7 +26,7 @@ public class StartServer {
 
         System.out.println("Server on localhost port:"+serverPort);
 
-        IOfficeRepository officeRepository=new OfficeRepository(serverProps);
+        IOfficeRepository officeRepository=new OfficeRepositoryOrm();
         IParticipantRepository participantRepository=new ParticipantRepository(serverProps);
         ITrialRepository trialRepository=new TrialRepository(serverProps);
         IEnrolledRepository enrolledRepository=new EnrolledRepository(serverProps);
@@ -39,6 +40,7 @@ public class StartServer {
             System.err.println("Error starting the server" + e.getMessage());
         }finally {
             try {
+                OfficeRepositoryOrm.close();
                 server.stop();
             }catch(ServiceException e){
                 System.err.println("Error stopping server "+e.getMessage());

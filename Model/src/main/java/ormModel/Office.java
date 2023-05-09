@@ -1,7 +1,19 @@
-package model;
+package ormModel;
 
-public class Office extends Entity<Long> {
+import javax.persistence.*;
+
+@Entity
+@Table(name="offices")
+public class Office  {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id_office")
+    private  long id;
+    @Column(name="username")
     private String username;
+
+    @Column(name="password")
     private String password;
 
     public Office() {
@@ -13,10 +25,11 @@ public class Office extends Entity<Long> {
     }
 
     public Office(Long aLong, String username, String password) {
-        super(aLong);
+        this.id=aLong;
         this.username = username;
         this.password = password;
     }
+
 
     public String getUsername() {
         return username;
@@ -56,5 +69,14 @@ public class Office extends Entity<Long> {
     @Override
     public String toString() {
         return "Office: username=" + username + " password=" + password;
+    }
+
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

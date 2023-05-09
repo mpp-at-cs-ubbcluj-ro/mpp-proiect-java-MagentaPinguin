@@ -23,46 +23,12 @@ public class OfficeRepository implements IOfficeRepository {
 
     @Override
     public void add(Office item) throws RepositoryException {
-        logger.traceEntry("Param {}", item);
-        String sqlAdd = "Insert into offices (username, password) VALUES (?,?)";
-        Connection connection;
-        try {
-            connection = dbConnection.getConnection();
-        } catch (IOException | SQLException e) {
-            throw logger.throwing(new RepositoryException(e));
-        }
-
-        try (
-                var statement = connection.prepareStatement(sqlAdd)) {
-            statement.setObject(1, item.getUsername());
-            statement.setObject(2, item.getPassword());
-            statement.execute();
-            logger.traceExit("Added successful!");
-        } catch (SQLException e) {
-            throw logger.throwing(new RepositoryException(e));
-        }
+        //Nu adaugam office
     }
 
     @Override
     public void update(Office item) throws RepositoryException {
-        logger.traceEntry("Param {}", item);
-        String sqlUpdate = "Update offices  set username=?, password=? where id_office=?";
-        Connection connection;
-        try {
-            connection = dbConnection.getConnection();
-        } catch (IOException | SQLException e) {
-            throw logger.throwing(new RepositoryException(e));
-        }
-
-        try (var statement = connection.prepareStatement(sqlUpdate)) {
-            statement.setObject(1, item.getUsername());
-            statement.setObject(2, item.getPassword());
-            statement.setObject(3, item.getId());
-            statement.executeUpdate();
-            logger.traceExit("Update successful");
-        } catch (SQLException e) {
-            throw logger.throwing(new RepositoryException(e));
-        }
+        //Nu fac update la office
     }
 
     @Override
@@ -136,13 +102,13 @@ public class OfficeRepository implements IOfficeRepository {
 
         Connection connection;
         try {
-            connection=dbConnection.getConnection();
+            connection = dbConnection.getConnection();
         } catch (IOException | SQLException e) {
             throw logger.throwing(new RepositoryException(e));
         }
 
         try (
-             var statement = connection.prepareStatement(sqlGetAll)) {
+                var statement = connection.prepareStatement(sqlGetAll)) {
             var result = statement.executeQuery();
             while (result.next()) {
                 var item = new Office(
@@ -161,29 +127,6 @@ public class OfficeRepository implements IOfficeRepository {
 
     @Override
     public void delete(Long itemID) throws RepositoryException {
-        logger.traceEntry("Param {}", itemID);
-        String sqlDelete = "DELETE from offices where id_office=?";
 
-        Connection connection;
-        try {
-            connection=dbConnection.getConnection();
-        } catch (IOException | SQLException e) {
-            throw logger.throwing(new RepositoryException(e));
-        }
-
-        try (
-             var statement = connection.prepareStatement(sqlDelete)) {
-            statement.setObject(1, itemID);
-            var affected = statement.executeUpdate();
-            if (affected == 0) {
-                logger.traceExit("Nothing deleted");
-                return;
-            }
-            logger.traceExit("Deleted successful");
-        } catch (SQLException e) {
-            throw logger.throwing(new RepositoryException(e));
-        }
     }
-
-
 }

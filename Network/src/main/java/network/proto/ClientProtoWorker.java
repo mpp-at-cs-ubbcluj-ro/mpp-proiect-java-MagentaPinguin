@@ -1,9 +1,8 @@
-package network.Proto;
+package network.proto;
 
 import model.DtoTrial;
 import model.Office;
 import model.Participant;
-import network.RPC.RequestType;
 import services.IClientServices;
 import services.IObserver;
 import services.ServiceException;

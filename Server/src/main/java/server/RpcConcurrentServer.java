@@ -1,6 +1,6 @@
 package server;
 
-import network.RPC.ClientRpcWorker;
+import network.rpc.ClientRpcWorker;
 import services.IClientServices;
 
 import java.net.Socket;

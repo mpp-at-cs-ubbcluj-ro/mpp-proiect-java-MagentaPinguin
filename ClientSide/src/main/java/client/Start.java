@@ -4,9 +4,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import network.Proto.ServicesProtoProxy;
+import network.proto.ServicesProtoProxy;
 import services.IClientServices;
-import network.RPC.ServicesRpcProxy;
 
 
 import java.io.IOException;

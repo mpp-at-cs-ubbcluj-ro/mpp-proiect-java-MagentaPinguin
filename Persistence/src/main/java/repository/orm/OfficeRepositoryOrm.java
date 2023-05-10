@@ -24,10 +24,9 @@ public class OfficeRepositoryOrm implements IOfficeRepository {
         // A SessionFactory is set up once for an application!
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .configure() // configures settings from hibernate.cfg.xml
-                .build();;
+                .build();
         try {
             sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
-            System.out.println("BBBBBBBBBBBBB");
         }
         catch (Exception e) {
             System.err.println("Exception "+e);
@@ -61,7 +60,7 @@ public class OfficeRepositoryOrm implements IOfficeRepository {
         try (var session= sessionFactory.openSession()){
             Transaction tx=session.beginTransaction();
             officeORM= session.createQuery("select entity from Office entity where id=:id_itemId", ormModel.Office.class).setParameter("id_itemId",itemID).getSingleResult();
-            System.out.println("AAAAAAAAAAAAAAAAAAAAAAA      "+officeORM.getUsername());
+
             tx.commit();
         } catch (Exception e) {
             throw logger.throwing(new RepositoryException(e));
@@ -91,7 +90,6 @@ public class OfficeRepositoryOrm implements IOfficeRepository {
     public List<Office> getAll() throws RepositoryException {
         logger.traceEntry("Param none");
         List<Office> list = new ArrayList<>();
-
 
         ormModel.Office officeORM=null;
         try (var session= sessionFactory.openSession()){

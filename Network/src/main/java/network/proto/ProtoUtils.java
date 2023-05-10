@@ -1,6 +1,5 @@
-package network.Proto;
+package network.proto;
 import model.*;
-import network.RPC.Response;
 
 import java.util.List;
 

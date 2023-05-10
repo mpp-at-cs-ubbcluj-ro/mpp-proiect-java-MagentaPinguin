@@ -1,4 +1,4 @@
-package network.RPC;
+package network.rpc;
 
 
 import model.DtoTrial;

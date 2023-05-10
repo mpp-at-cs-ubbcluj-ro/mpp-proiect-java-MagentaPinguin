@@ -1,6 +1,6 @@
 package server;
 
-import network.Proto.ClientProtoWorker;
+import network.proto.ClientProtoWorker;
 import services.IClientServices;
 
 import java.net.Socket;

@@ -20,7 +20,7 @@ public class Service implements IClientServices {
     private final ITrialRepository trialRepository;
     private final IEnrolledRepository enrolledRepository;
 
-    Map<Long, IObserver> clients;
+    private Map<Long, IObserver> clients;
 
 
     public Service(IOfficeRepository serviceOffice, IParticipantRepository serviceParticipant, ITrialRepository serviceTrial, IEnrolledRepository serviceEnrollment) {

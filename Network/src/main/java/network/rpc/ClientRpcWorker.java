@@ -1,9 +1,8 @@
-package network.RPC;
+package network.rpc;
 
 import model.DtoTrial;
 import model.Office;
 import model.Participant;
-import network.Proto.ProtoUtils;
 import services.*;
 
 import java.io.IOException;

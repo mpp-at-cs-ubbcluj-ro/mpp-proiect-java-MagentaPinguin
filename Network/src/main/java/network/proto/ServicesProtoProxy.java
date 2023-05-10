@@ -1,4 +1,4 @@
-package network.Proto;
+package network.proto;
 
 
 import model.DtoTrial;

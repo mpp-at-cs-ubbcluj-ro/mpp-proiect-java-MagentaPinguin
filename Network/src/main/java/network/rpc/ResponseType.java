@@ -1,4 +1,4 @@
-package network.RPC;
+package network.rpc;
 
 
 public enum ResponseType {

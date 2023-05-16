@@ -8,12 +8,5 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/MPP_Lab</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="Project_Blood@localhost" uuid="6024d0d9-714e-4f1f-8d9e-804a7bb79df8">
-      <driver-ref>postgresql</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:5432/Project_Blood</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
   </component>
 </project>

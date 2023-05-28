@@ -21,9 +21,8 @@ public class OfficeRepositoryOrm implements IOfficeRepository {
     private static final Logger logger = LogManager.getLogger();
     private static org.hibernate.SessionFactory sessionFactory;
     public OfficeRepositoryOrm() {
-        // A SessionFactory is set up once for an application!
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
-                .configure() // configures settings from hibernate.cfg.xml
+                .configure()
                 .build();
         try {
             sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();

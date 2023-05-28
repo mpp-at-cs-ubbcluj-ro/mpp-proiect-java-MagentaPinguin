@@ -11,7 +11,6 @@ import services.IClientServices;
 
 public abstract class AbstractController {
 
-
     enum Type {
         CONFIRM,
         WARNING

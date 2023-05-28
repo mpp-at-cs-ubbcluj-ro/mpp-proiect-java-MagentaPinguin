@@ -68,6 +68,7 @@ public class Trial extends Entity<Long> {
     @Override
     public String toString() {
         return "Trial{" +
+                "id='" + getId() + '\'' +
                 "name='" + name + '\'' +
                 ", minAge=" + minAge +
                 ", maxAge=" + maxAge +

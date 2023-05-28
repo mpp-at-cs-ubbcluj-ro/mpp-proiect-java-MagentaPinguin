@@ -10,7 +10,6 @@ public class TestJava {
         getAll();
         getOne();
         addOne();
-        getOneSpecific();
         update();
         delete();
 
@@ -21,7 +20,7 @@ public class TestJava {
             Trial[] res = usersClient.getAll();
             System.out.println("GET ALL:\n");
             for (Trial u : res) {
-                System.out.println(u.getId() + ": " + u.getName());
+                System.out.println(u.getId() + ": " +u.getId()+" name:"+ u.getName());
             }
         });
 
@@ -33,20 +32,12 @@ public class TestJava {
             System.out.println(res.getId()+": "+res.getName());
         });
     }
-    private static void getOneSpecific() {
-        show(()->{
-            Trial  res=usersClient.getOneSpecific(new Trial("Poker",18,33));
-            System.out.println("Specific item has id: ");
-            System.out.println("ID: "+res);
-        });
-    }
-
 
     private static void addOne() {
         show(()->{
             Trial id =usersClient.addTrial( new Trial("Poker",18,33));
-            System.out.println("Add trial: ");
-            System.out.println("New itm with ID: "+id.getName());
+            System.out.println(id);
+
         });
     }
 

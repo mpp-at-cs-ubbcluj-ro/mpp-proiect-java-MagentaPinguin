@@ -1,6 +1,7 @@
 package services;
 
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import model.Trial;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/trials")
+@CrossOrigin(origins = "http://localhost:3000")
 public class TrialController {
 
     @Autowired
@@ -45,12 +47,9 @@ public class TrialController {
     @RequestMapping(method= RequestMethod.POST)
     public ResponseEntity<Trial> addTrial(@RequestBody Trial item) throws RepositoryException {
         System.out.println(item);
-        var found= repository.getSpecificTrial(item.getName(), item.getMinAge(), item.getMaxAge());
-        if(found.isPresent())
-            return ResponseEntity.badRequest().build();
-        repository.add(item);
-        found= repository.getSpecificTrial(item.getName(), item.getMinAge(), item.getMaxAge());
-        return found.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
+        var added=repository.add(item);
+        System.out.println(added);
+        return ResponseEntity.ok(added);
 
     }
 

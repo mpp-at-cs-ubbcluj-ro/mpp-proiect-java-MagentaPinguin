@@ -1,4 +1,4 @@
-package services;
+package repository.services;
 
 public class ServiceException extends RuntimeException{
     public ServiceException(Exception e) {

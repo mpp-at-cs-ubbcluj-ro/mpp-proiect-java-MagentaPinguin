@@ -94,7 +94,7 @@ public class OfficeRepositoryOrm implements IOfficeRepository {
         try (var session= sessionFactory.openSession()){
             Transaction tx=session.beginTransaction();
             list= session.createQuery("select entity from Office entity", ormModel.Office.class)
-                    .getResultList()
+                    .   getResultList()
                     .stream().map(e->new Office(e.getId(),e.getUsername(),e.getPassword())).toList();
             tx.commit();
         } catch (Exception e) {

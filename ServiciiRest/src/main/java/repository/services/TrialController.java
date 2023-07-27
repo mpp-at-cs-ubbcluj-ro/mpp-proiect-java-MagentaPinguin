@@ -1,7 +1,7 @@
-package services;
+package repository.services;
 
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
 import model.Trial;
 import org.springframework.beans.factory.annotation.Autowired;
 

@@ -5,7 +5,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import services.ServiceException;
+import repository.services.ServiceException;
 
 import java.util.concurrent.Callable;
 
